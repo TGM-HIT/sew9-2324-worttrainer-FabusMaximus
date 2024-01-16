@@ -18,14 +18,14 @@ public class Wortliste {
         list = new LinkedList<>();
     }
 
-    /**
+
     public Worteintrag getWord(int index) {
         if (index < list.size() && index >= 0) {
             return list.get(index);
         } else {
             throw new IndexOutOfBoundsException();
         }
-    }*/
+    }
 
     /**
      * Methode: getWordPair, gibt die Liste mit den Wortpaaren zurück.
