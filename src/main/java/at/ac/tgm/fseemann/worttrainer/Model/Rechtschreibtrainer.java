@@ -3,19 +3,21 @@ package at.ac.tgm.fseemann.worttrainer.Model;
 import java.util.Random;
 
 /**
- * Klasse Rechtschreibtrainer.
+ * Klasse Rechtschreibtrainer
+ *
  * @author Fabian Seemann
  * @version 16.01.2024
  */
 public class Rechtschreibtrainer {
-
     private Wortliste list;
     private Worteintrag worteintrag;
-    private int played, won;
+    private int gamesPlayed, gamesWon;
 
     /**
      * Konstruktor der Klasse Rechtschreibtrainer.
-     * @param list Die Liste die übergeben wird.
+     *
+     * @param list Die Liste welche übergeben wird.
+     * @throws IllegalArgumentException Exception die bei ungültigen Werten ausgegeben wird.
      */
     public Rechtschreibtrainer(Wortliste list) {
         this.list = list;
@@ -23,73 +25,101 @@ public class Rechtschreibtrainer {
 
     /**
      * Methode: randomWord, wählt ein zufälliges Wort aus der Liste aus.
+     *
+     * @throws IllegalArgumentException Exception die bei einer ungültigen Liste ausgegeben wird.
      */
-    public void randomWord() {
-        if(list.getWordPair().size() != 0) {
-            Random random = new Random();
-            worteintrag = list.getWord(random.nextInt(list.getWordPair().size()));
+    public void chooseRandom() throws IllegalArgumentException {
+        if (this.list.getList().isEmpty()) {
+            throw new IllegalArgumentException("Leere Liste!");
+        }
+        Random r1 = new Random();
+        worteintrag = this.list.getWord(r1.nextInt(this.list.getList().size()));
+    }
+
+    /**
+     * Methode: chooseIndex, wählt ein Wort anhand eines Indexes aus.
+     *
+     * @param index Der Index mit dem das Wort ausgewählt wird.
+     * @throws IllegalArgumentException  Falls die Liste leer ist.
+     * @throws IndexOutOfBoundsException Falls der Index ungültig ist.
+     */
+    public void chooseIndex(int index) throws IndexOutOfBoundsException, IllegalArgumentException {
+        if (this.list.getList().isEmpty()) {
+            throw new IllegalArgumentException("Ungültige Liste!");
+        }
+        if (index < 0 || index >= this.list.getList().size()) {
+            throw new IndexOutOfBoundsException();
+        } else {
+            this.worteintrag = this.list.getWord(index);
         }
     }
 
     /**
-     * Methode: indexWord, wählt ein Wort aus der Liste anhand eines Indexes aus.
-     * @param index Das Wort aus der Liste an der Stelle dieses Indexes.
-     */
-    public void indexWord(int index) {
-        if(list.getWordPair().size() != 0 && index > 0 && index <= list.getWordPair().size()) {
-            worteintrag = list.getWord(index);
-        }
-    }
-
-    /**
-     * Methode: checkWord, kontrolliert, ob das aktuelle Wort mit dem übergebenen Wort übereinstimmt.
+     * Methode: check, überprüft, ob das übergebene Wort mit dem aktuellen übereinstimmt.
+     *
      * @param word Das übergebene Wort.
-     * @return Gibt zurück ob das Wort richtig oder falsch ist.
+     * @return Gibt true oder false zurück.
      */
-    public boolean checkWord(String word) {
-        this.played++;
-        if(word.toLowerCase().equals(worteintrag.getWord().toLowerCase())) {
-            this.won++;
+    public boolean check(String word) {
+        this.gamesPlayed++;
+        if (word.equals(this.worteintrag.getWord())) {
+            this.gamesWon++;
             return true;
         }
         return false;
     }
 
     /**
-     * Methode: toString, ausgabe des Rechtschreibtrainers.
-     * @return Die Ausgabe.
+     * Methode: checkIgnoreCase, überprüft, ob das übergebene Wort mit dem aktuellen übereinstimmt.
+     *
+     * @param word Das übergebene Wort.
+     * @return Gibt true oder false zurück.
      */
+    public boolean checkIgnoreCase(String word) {
+        this.gamesPlayed++;
+        if (word.equalsIgnoreCase(this.worteintrag.getWord())) {
+            this.gamesWon++;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Methode: toString, gibt einen Text zurück.
+     */
+    @Override
     public String toString() {
-        String text = this.played + ", " + this.won + "\n";
-        text += list.toString();
+        String text = this.gamesPlayed + ", " + this.gamesWon + "\n";
+        text += this.list.toString();
         return text;
     }
 
-    public void setPlayed(int played) {
-        this.played = played;
-    }
-
-    public int getPlayed() {
-        return this.played;
-    }
-
-    public void setWon() {
-        this.won = won;
-    }
-
-    public int getWon() {
-        return this.won;
-    }
 
     public void setList(Wortliste list) {
         this.list = list;
     }
 
     public Wortliste getList() {
-        return this.list;
+        return list;
+    }
+
+    public int getGamesPlayed() {
+        return this.gamesPlayed;
+    }
+
+    public void setGamesPlayed(int zahl) {
+        this.gamesPlayed = zahl;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public void setGamesWon(int zahl) {
+        this.gamesWon = zahl;
     }
 
     public Worteintrag getWorteintrag() {
-        return this.worteintrag;
+        return worteintrag;
     }
 }

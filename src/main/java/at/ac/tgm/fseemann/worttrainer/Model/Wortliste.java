@@ -3,76 +3,90 @@ package at.ac.tgm.fseemann.worttrainer.Model;
 import java.util.LinkedList;
 
 /**
- * Klasse Wortlise.
+ * Klasse Wortliste.
+ *
  * @author Fabian Seemann
  * @version 16.01.2024
  */
 public class Wortliste {
-
     private LinkedList<Worteintrag> list;
 
     /**
      * Konstruktor der Klasse Wortliste.
      */
     public Wortliste() {
-        list = new LinkedList<>();
+        this.list = new LinkedList<>();
     }
 
+    /**
+     * Methode: addWord, erstellt ein Wort und fügt es der Liste hinzu.
+     *
+     * @param wort Das Wort welches hinzugefügt wird.
+     * @param url  Die URL welche hinzugefügt wird.
+     * @throws IllegalArgumentException Exception die geworfen wird wenn die Werte ungültig sind.
+     */
+    public void addWord(String wort, String url) throws IllegalArgumentException {
+        Worteintrag worteintrag = new Worteintrag(wort, url);
+        this.list.addLast(worteintrag);
+    }
 
-    public Worteintrag getWord(int index) {
-        if (index < list.size() && index >= 0) {
-            return list.get(index);
+    /**
+     * Methode: getWord, gibt ein Worteintrag zurück.
+     *
+     * @param index Der Worteintrag aus der Stelle der Liste.
+     * @return Der Worteintrag aus der Stelle der Liste.
+     * @throws IndexOutOfBoundsException Exception die ausgegeben wird, wenn der Index nicht gültig ist.
+     */
+    public Worteintrag getWord(int index) throws IndexOutOfBoundsException {
+        if (index < this.list.size() && index >= 0) {
+            return this.list.get(index);
         } else {
             throw new IndexOutOfBoundsException();
         }
     }
 
     /**
-     * Methode: getWordPair, gibt die Liste mit den Wortpaaren zurück.
-     * @return Die Liste die zurückgegeben wird.
-     */
-    public LinkedList<Worteintrag> getWordPair() {
-        return list;
-    }
-
-    /**
-     * Methode: addWord, fügt ein Wort in die Liste hinzu.
-     * @param word Das Wort aus dem Worteintrag, welches hinzugefügt wird.
-     * @param url  Die URL aus dem Worteintrag, welche hinzugefügt wird.
-     */
-    public void addWord(String word, String url) {
-        if (word != null && url != null) {
-            Worteintrag worteintrag = new Worteintrag(word, url);
-            list.add(worteintrag);
-        } else {
-            throw new IllegalArgumentException("Ungültiger Worteintrag!");
-        }
-    }
-
-    /**
      * Methode: deleteWord, löscht ein Wort aus der Liste.
+     *
      * @param word Das Wort welches aus der Liste gelöscht werden soll.
+     * @return Gibt true oder false zurück.
+     * @throws IllegalArgumentException Exception die ausgegeben wird wenn das Wort ungültig ist.
      */
-    public void deleteWord(String word) {
-        if (word != null) {
-            for (Worteintrag worteintrag : list) {
-                if (worteintrag.getWord().equals(word)) {
-                    list.remove();
-                }
+    public boolean deleteWord(String word) throws IllegalArgumentException {
+        boolean success = false;
+        if (word == null) {
+            throw new IllegalArgumentException("Kein gültiges Wort");
+        }
+        if (word.length() < 2) {
+            throw new IllegalArgumentException("Kein gültiges Wort");
+        }
+        for (Worteintrag we : this.list) {
+            if (we.getWord().equals(word)) {
+                success = true;
+                this.list.remove();
             }
         }
+        return success;
     }
 
     /**
-     * Methode: listToString, gibt die Inhalte der Worteinträge zurück.
-     * @return Die Worteinträge die ausgegeben werden.
+     * Methode: toString, gibt einen Text zurück.
      */
-    public String listToString() {
-        String text = "";
-        for(Worteintrag worteintrag: list) {
-            text += worteintrag.toString() + ", ";
+    @Override
+    public String toString() {
+        StringBuilder text = new StringBuilder();
+        for (Worteintrag we : this.list) {
+            text.append(we.toString()).append("\n");
         }
-        return text;
+        return text.toString();
+    }
+
+    /**
+     * Methode: getList, gibt eine Liste zurück.
+     *
+     * @return Die List mit den Wortpaaren.
+     */
+    public LinkedList<Worteintrag> getList() {
+        return this.list;
     }
 }
-
